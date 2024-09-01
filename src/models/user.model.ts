@@ -6,13 +6,14 @@ export interface UserInput {
     email: string;
     password: string
     role: 'superadmin' | 'user';
+
 }
 
 export interface UserDocument extends UserInput, mongoose.Document {
 
     createAt: Date;
     updateAt: Date;
-    deleteAt: Date
+    deleteAt: Date;
 
 }
 
@@ -22,6 +23,7 @@ const userSchema = new mongoose.Schema({
     email: {type: String, required: true, index: true, unique: true},
     password: {type: String, required: true},
     role: { type: String, enum: ['superadmin', 'user'], default: 'user' }
+    
 },
 {
     

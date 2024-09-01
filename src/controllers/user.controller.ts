@@ -7,7 +7,8 @@ class userController {
     public async create(req: Request, res: Response) {
 
         try{
-            if (req.params.role !== 'superadmin') {
+
+            if (req.body.loggedUser.role !== 'superadmin') {
                 console.log(req.body.loggedUser)
                 return res.status(403).json({ message: 'Forbidden' });
             }
@@ -32,11 +33,9 @@ class userController {
         catch (error){
             console.log(error)
             if (error instanceof ReferenceError){
-                res.status(400).json("User does not exists")
-            }
-
-            if(error instanceof ReferenceError){
-                res.status(400).json("Not Authorized")
+                res.status(400).json({ message:"User does not exists"})
+            }else if(error instanceof ReferenceError){
+                res.status(400).json({ message:"Not Authorized"})
             }
             res.status(500).json(error)
         }
@@ -79,7 +78,7 @@ class userController {
 
             const user: UserDocument | null = await userService.update(req.params.id, req.body as UserInput);
             if(!user) {
-                res.status(404).json({ message: 'User with id: ${req.params.id} not found' })
+                res.status(404).json({ message: `User with id: ${req.params.id} not found` })
             };
             res.json(user);
 
@@ -97,7 +96,7 @@ class userController {
 
             const user: UserDocument | null = await userService.delete(req.params.id);
             if(!user) {
-                res.status(404).json({ message: 'User with id: ${req.params.id} not found' })
+                res.status(404).json({ message: `User with id: ${req.params.id} not found` })
             };
             res.json(user);
 

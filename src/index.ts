@@ -3,6 +3,7 @@ import dotenv from 'dotenv';
 
 import { router } from './routes/posts';
 import { router as user } from './routes/user';
+import { router as comment } from './routes/comment';
 import { db } from './config/db'
 
 dotenv.config();
@@ -23,12 +24,13 @@ app.get('/', (req: Request, res: Response)=>{
 
 app.use('/api/v1/posts', router);
 app.use('/api/v1/user', user);
+app.use('/api/v1/comment', comment)
 
 db.then( () => {
 
     app.listen(port, ()=> {
 
-        console.log('Server is running on port ${port}');
+        console.log(`Server is running on port ${port}`);
     
     });
 
