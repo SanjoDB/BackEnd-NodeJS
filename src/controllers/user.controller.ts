@@ -7,11 +7,10 @@ class userController {
     public async create(req: Request, res: Response) {
 
         try{
-            
-            // const userExists: UserDocument | null = await userService.findByEmail(req.body.email);
-            // if (userExists) {
-                // res.status(400).json({ message: "User already exists" })
-            // };
+            if (req.params.role !== 'superadmin') {
+                console.log(req.body.loggedUser)
+                return res.status(403).json({ message: 'Forbidden' });
+            }
             const user: UserDocument = await userService.create(req.body as UserInput);
             return res.status(201).json(user);
 
@@ -25,6 +24,24 @@ class userController {
         }
     
     };
+    public async login(req: Request, res:Response){
+        try{
+            const userObj = await userService.login(req.body);
+            res.status(200).json(userObj)
+        }
+        catch (error){
+            console.log(error)
+            if (error instanceof ReferenceError){
+                res.status(400).json("User does not exists")
+            }
+
+            if(error instanceof ReferenceError){
+                res.status(400).json("Not Authorized")
+            }
+            res.status(500).json(error)
+        }
+        
+    }
     
     public async get(req: Request, res: Response) {
     

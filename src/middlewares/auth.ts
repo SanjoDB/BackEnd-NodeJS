@@ -1,32 +1,26 @@
 import { Request, Response, NextFunction } from "express";
-import jwt, {TokenExpiredError} from "jasonwebtoken";
+import jwt,{TokenExpiredError} from "jsonwebtoken";
 
-const auth = (req: Request, res: Response, next: NextFunction) => {
-
-    let token = req.header("Authorization");
-    token = token?.replace("Bearer ", " ")
-
-    if(!token){
-        return res.status(401).json({message: "Unauthorized"});
-    }
-
-    try{
-
-        const decoded: any = jwt.verify(token, process.env.JWT_SECRET || "secret");
-        req.body.loggedUser = decoded;
-        req.params.id = decoded.id;
-        next();
-
-    } catch (error){
-
-        if(error instanceof TokenExpiredError){
-            return res.status(401).json({message: "Token expired"});
+const auth = async(req:Request, res:Response, next:NextFunction)=>{
+    try {
+        let token: string | undefined = req.headers.authorization;
+        if(!token)
+            res.status(401).json({message:"Not Authorized"});
+        else{
+            token = token.replace("Bearer ", "");
+            const decoded: any = jwt.verify(token, process.env.JWT_SECRET || "secret");
+            req.body.loggedUser = decoded;
+            req.params.id = decoded.user_id;
+            req.params.role = decoded.role;
+            next();
         }
 
-        res.status(401).json({message: "Unauthorized"})
-        
+    }catch(error){
+        if(error instanceof TokenExpiredError)
+            res.status(401).json({message:"Token Expired", error})
+        else
+            res.status(401).json({message:"Token Invalid", error})
+
     }
-
 }
-
 export default auth;

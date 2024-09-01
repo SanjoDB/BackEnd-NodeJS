@@ -3,7 +3,7 @@ import dotenv from "dotenv";
 
 dotenv.config();
 
-const connectionString = process.env.MONGO_URL || "mongodb://localhost:21017/nodejs";
+const connectionString = process.env.MONGO_URL || "mongodb+srv://victor:123@compunet3.mnk2c.mongodb.net/Talleres";
 
 export const db = mongoose.connect(connectionString).then(
                                                     () => console.log("Connected to MongoDB")

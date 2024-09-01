@@ -4,14 +4,16 @@ import auth from '../middlewares/auth';
 
 export const router = express.Router();
 
-router.post("/", userController.create);
+router.post("/",auth, userController.create);
 
 router.get("/", userController.getAll);
+
+router.post("/login", userController.login)
 
 router.get("/profile", auth, userController.get);
 
 router.get("/:id", userController.get);
 
-router.put("/:id", userController.update);
+router.put("/:id",auth, userController.update);
 
-router.delete("/:id", userController.delete);
+router.delete("/:id",auth, userController.delete);
