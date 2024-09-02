@@ -38,11 +38,8 @@ class CommentService {
 
     public async update(id: string, commentInput: CommentInput): Promise<CommentDocument | null> {
         try{
-            const comment: CommentDocument | null = await CommentModel.findOneAndUpdate(
-                { _id: id },             // Busca el comentario por ID
-                 commentInput ,  // Actualiza los campos proporcionados en commentInput
-                { new: true }            // Devuelve el documento actualizado
-            );            return comment;
+            const comment: CommentDocument | null = await CommentModel.findOneAndUpdate({ _id: id }, commentInput, { new: true });
+            return comment;
         }catch (error){
             throw error;
         }

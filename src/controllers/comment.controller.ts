@@ -23,6 +23,7 @@ class CommentController {
     public async get(req: Request, res: Response) {
 
         try {
+
             const comment: CommentDocument | null = await CommentService.findById(req.params.id);
             res.json(comment);
             
@@ -64,8 +65,11 @@ class CommentController {
         }
 
     };
+
     public async update(req: Request, res: Response) {
+
         try {
+
             const comment: CommentDocument | null = await CommentService.findById(req.params.id);
             
             if (!comment) {
@@ -82,12 +86,17 @@ class CommentController {
             res.json(updatedComment);
 
         } catch (error) {
+
             res.status(500).json(error);
+
         }
-    }
+
+    };
 
     public async delete(req: Request, res: Response) {
+
         try {
+
             const comment: CommentDocument | null = await CommentService.findById(req.params.id);
             
             if (!comment) {
@@ -104,9 +113,12 @@ class CommentController {
             res.json({ message: "Comment deleted successfully" });
 
         } catch (error) {
+
             res.status(500).json(error);
+
         }
-    }
+        
+    };
 
 };
 
