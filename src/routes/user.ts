@@ -1,10 +1,12 @@
 import express, { Request, Response } from "express";
 import userController from '../controllers/user.controller';
 import auth from '../middlewares/auth';
+import userSchema from "../schemas/user.schema";
+import validateSchema from "../middlewares/validateSchema";
 
 export const router = express.Router();
 
-router.post("/",auth, userController.create);
+router.post("/",auth,validateSchema(userSchema), userController.create);
 
 router.get("/", userController.getAll);
 
