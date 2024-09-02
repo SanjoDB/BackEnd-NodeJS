@@ -29,15 +29,19 @@ Asegúrate de tener instalados los siguientes requisitos:
    git clone https://github.com/tu-usuario/taller-node.git
    cd taller-node
 2. Instala las dependencias con npm o yarn:
+   ```bash
    npm install
    # o
    yarn install
 3. Configuracion:
    3.1 Renombra el archivo .env.example a .env y actualiza las variables de entorno con tus credenciales. Ejemplo:
+     ```bash 
      MONGO_URL=mongodb+srv://usuario:password@cluster.mongodb.net/miBaseDeDatos
      JWT_SECRET=tuClaveSecretaParaJWT
      PORT=3000
+     ```
    3.2 Inicia el servidor:
+     ```bash
      npm run dev
      # o
      yarn dev
