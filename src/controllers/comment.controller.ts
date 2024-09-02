@@ -23,12 +23,9 @@ class CommentController {
     public async get(req: Request, res: Response) {
 
         try {
-
             const comment: CommentDocument | null = await CommentService.findById(req.params.id);
-            if (!comment) {
-                return res.status(404).json({ message: `Comment with id: ${req.params.id} not found` });
-            }
             res.json(comment);
+            
 
         } catch (error) {
 
@@ -56,7 +53,7 @@ class CommentController {
     public async getByParentId(req: Request, res: Response) {
 
         try {
-
+            
             const comments: CommentDocument[] = await CommentService.findByParentId(req.params.parentId);
             res.json(comments);
 
@@ -67,42 +64,49 @@ class CommentController {
         }
 
     };
-
     public async update(req: Request, res: Response) {
-
         try {
-
-            const comment: CommentDocument | null = await CommentService.update(req.params.id, req.body.content as CommentInput);
+            const comment: CommentDocument | null = await CommentService.findById(req.params.id);
+            
             if (!comment) {
                 return res.status(404).json({ message: `Comment with id: ${req.params.id} not found` });
             }
-            res.json(comment);
+
+    
+            const { id } = req.body.loggedUser; 
+            if (comment.userId.toString() !== id) {
+                return res.status(403).json({ message: "You do not have permission to modify this comment" });
+            }
+
+            const updatedComment: CommentDocument | null = await CommentService.update(req.params.id, req.body as CommentInput);
+            res.json(updatedComment);
 
         } catch (error) {
-
             res.status(500).json(error);
-
         }
-
-    };
+    }
 
     public async delete(req: Request, res: Response) {
-
         try {
-
-            const comment: CommentDocument | null = await CommentService.delete(req.params.id);
+            const comment: CommentDocument | null = await CommentService.findById(req.params.id);
+            
             if (!comment) {
                 return res.status(404).json({ message: `Comment with id: ${req.params.id} not found` });
             }
-            res.json(comment);
+
+            const { id } = req.body.loggedUser; 
+            if (comment.userId.toString() !== id) {
+                return res.status(403).json({ message: "You do not have permission to delete this comment" });
+            }
+
+            
+            await CommentService.delete(req.params.id);
+            res.json({ message: "Comment deleted successfully" });
 
         } catch (error) {
-
             res.status(500).json(error);
-
         }
-
-    };
+    }
 
 };
 

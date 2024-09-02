@@ -13,7 +13,8 @@ class CommentService {
 
     public async findById(id: string): Promise<CommentDocument | null> {
         try{
-            return CommentModel.findById(id).populate('userId', 'name email').exec();
+            const comment = await CommentModel.findById(id)
+            return comment;
         }catch (error){
             throw error;
         }
@@ -37,8 +38,11 @@ class CommentService {
 
     public async update(id: string, commentInput: CommentInput): Promise<CommentDocument | null> {
         try{
-            const comment: CommentDocument | null = await CommentModel.findOneAndUpdate({ _id: id }, commentInput, { new: true });
-            return comment;
+            const comment: CommentDocument | null = await CommentModel.findOneAndUpdate(
+                { _id: id },             // Busca el comentario por ID
+                 commentInput ,  // Actualiza los campos proporcionados en commentInput
+                { new: true }            // Devuelve el documento actualizado
+            );            return comment;
         }catch (error){
             throw error;
         }

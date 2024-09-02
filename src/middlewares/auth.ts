@@ -9,8 +9,7 @@ const auth = async(req:Request, res:Response, next:NextFunction)=>{
         else{
             token = token.replace("Bearer ", "");
             const decoded: any = jwt.verify(token, process.env.JWT_SECRET || "secret");
-            req.body.loggedUser = decoded;
-            req.params.id = decoded.user_id;
+            req.body.loggedUser = decoded
             req.params.role = decoded.role;
             next();
         }
